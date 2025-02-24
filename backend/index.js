@@ -1,7 +1,10 @@
-const { request } = require("express")
+import express from "express"
+import indexRoutes from "./Routes/index.routes.js"
 
-const app = request
+const app = express();
 
+app.use(indexRoutes)
 
-app.get("/",(req,res) => res.send("Hola mundo desde API"))
-console.log("Hola mundo")
+app.listen(5000, () => {
+  console.log('Servidor ejecutándose en http://localhost:5000');
+});
