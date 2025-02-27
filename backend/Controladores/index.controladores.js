@@ -5,3 +5,6 @@ export const getIndex = (req, res) => {
 export const getPong = (req, res) => {
     res.send('pong');
 }
+
+
+
