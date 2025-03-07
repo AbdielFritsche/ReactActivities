@@ -6,10 +6,10 @@ const Item = ({item,ondelete}) => {
         <div>
           <ol>
             <li>{item.name}</li>
-            <li>{item.price}</li>
+            <li>{item.value}</li>
             <li>
               <Button 
-               click={() => ondelete(item.id)}
+               click={() => ondelete(item.item.id)}
                name={"X"}/> 
             </li>
           </ol>

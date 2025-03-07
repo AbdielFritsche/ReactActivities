@@ -2,41 +2,41 @@ import React, { useState } from 'react'
 import Button from './Button'
 import { useNavigate } from 'react-router-dom';
 
-const Add = ({add}) => {
+const Add = ({ add }) => {
   const navigate = useNavigate();
-  const [name,setName] = useState("");
-  const [price,setPrice] = useState("");
+  const [name, setName] = useState("");
+  const [value, setValue] = useState(""); 
+
   const onsubmit = (e) => {
     e.preventDefault();
-    if (!name || !price ) {
-      alert("Ingresa algo ")
-      return
-    };
-    add({name,price});
+    if (!name || value === "") { 
+      alert("Ingresa todos los datos necesarios");
+      return;
+    }
+    add({ name, value: parseInt(value) }); 
     setName("");
-    setPrice("");
-    navigate("/lista-items")
+    setValue("");
+    navigate("/lista-items");
   };
+
   return (
     <form onSubmit={onsubmit}>
-        <input 
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-            type = "text" 
-            name="" 
-            id="">
-        </input>
-        <input 
-            onChange={(e) => setPrice(e.target.value)}
-            value={price}
-            type = "text" 
-            name="" 
-            id="">
-        </input>
-        <input type = "text" name="" id=""></input>
-        <input type = "submit" name = "Agregar"/>    
+      <input
+        onChange={(e) => setName(e.target.value)}
+        value={name}
+        type="text"
+        placeholder="Item Name"
+      />
+      <input
+        onChange={(e) => setValue(e.target.value)}
+        value={value}
+        type="text"
+        placeholder="Value"
+      />
+      <input type="submit" value="Agregar"/>
     </form>
   );
 };
+
 
 export default Add

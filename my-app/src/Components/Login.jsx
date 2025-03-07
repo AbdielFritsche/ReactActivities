@@ -17,7 +17,6 @@ const Login = ({ login }) => {
     const isLoginSuccess = login({ username, password });
 
     if (isLoginSuccess) {
-      alert("Login exitoso!");
       setUsername("");
       setPassword("");
       navigate("/");  

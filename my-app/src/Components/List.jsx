@@ -3,10 +3,13 @@ import Item from './Item'
 
 
 const List = ({ items, ondelete }) => {
-    return (
+  if (!items || items.length === 0) {
+    return <p>No hay ítems para mostrar</p>;
+  }  
+  return (
       <>
-        {items.map((i) => (
-          <Item key={i.id} item={i} 
+        {items.map((item) => (
+          <Item key={item.item_id} item={item} 
           ondelete={ondelete}
           />
         ))}

@@ -5,7 +5,8 @@ export const getItems = async (req,res) => {
     try{  
         const pool = await sqlConnect();
         const data = await pool.request().query("SELECT * FROM Items")
-        console.log(data)
+        res.json(data);
+
     }
     catch(error)
     {
@@ -33,19 +34,26 @@ export const getItem = async (req, res) => {
 
 export const postItem = async (req, res) => {
     try { 
+        console.log(req.body); 
         const pool = await sqlConnect();
+        const { name, value } = req.body;
+
+        if (!name || value == null) { 
+          return res.status(400).json({ error: "Missing name or value" });
+        }
+
         const data = await pool.request()
-            .input("myitem_id", sql.Int, req.body.item_id)
             .input("name", sql.VarChar, req.body.name)
             .input("value", sql.Int, req.body.value) 
-            .query("INSERT INTO Items (item_id, name, value) VALUES (@myitem_id, @name, @value)");
+            .query("INSERT INTO Items (name, value) OUTPUT INSERTED.* VALUES (@name, @value)");
 
         console.log(data);
-        res.status(200).json({ operation: true });
+        res.status(200).json(data.recordset[0]);
+
     } catch (error) {
-        console.log("Algo salió mal", error);
-        res.status(500).json({ error: "Server error" });
-    }
+        console.error("Error en la operación de inserción:", error);
+        res.status(500).json({ error: "Server error", details: error.message });
+    } 
 };
 
 
