@@ -11,6 +11,7 @@ import ResponsiveAppBar from './Components/ResponsiveAppBar';
 import Login from './Components/Login';
 import Home from './Components/Home';
 import Logout from './Components/Logout';
+import Register from './Components/Register';
 
 function App() {
   console.log("App component is running");
@@ -89,6 +90,22 @@ function App() {
     setIsAuthenticated(false);
   };
 
+  const register = async (user) => {
+    const result = await fetch("http://localhost:5000/register/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user)
+    });
+    const data = await result.json();
+    console.log(data);
+  
+    if (data.success) {
+      alert("Registro exitoso, ahora puedes iniciar sesión.");
+    } else {
+      alert("Error en el registro: " + data.message);
+    }
+  };
+
   return (
     <div>
       <BrowserRouter>
@@ -99,6 +116,7 @@ function App() {
             <Route path="/agregar-item" element={<Add add={add}/>}/>
             <Route path="/lista-items" element={<List items={items} ondelete={del}/>}/>
             <Route path="/login" element={!isAuthenticated ? <Login login={login} /> : <Home />} />
+            <Route path="/register" element={<Register register={register}/>}></Route>
           </Routes>
         <Footer/>
       </BrowserRouter>

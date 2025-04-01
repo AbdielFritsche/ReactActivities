@@ -1,4 +1,4 @@
-import { TextField, Box } from '@mui/material';
+import { TextField, Box, Button } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  
 
@@ -48,7 +48,12 @@ const Login = ({ login }) => {
           onChange={(e) => setPassword(e.target.value)}
           margin="normal"
         />
-        <button type="submit">Login</button> 
+        <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+          Login
+        </Button>
+        <Button variant="outlined" onClick={() => navigate('/register')} sx={{ mt: 2 }}>
+          Registrarse
+        </Button>
       </Box>
     </form>
   );
