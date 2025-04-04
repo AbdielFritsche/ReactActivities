@@ -1,5 +1,7 @@
 import {sqlConnect,sql} from "../Utils/sql.js"
 import { securePassword, verifyPassword } from "../Hashing/hashing.js";
+import jwt from "jsonwebtoken";
+
 
 export const register = async (req, res) => {
     try {
@@ -47,7 +49,9 @@ export const login = async (req, res) => {
         const isLogin = verifyPassword(password, salt, storedHash);
 
         if (isLogin) {
-            res.status(200).json({ isLogin: true, message: "Login successful" });
+            const token = jwt.sign({sub:data.recordset.userid},process.env.JWT,{expiresIn:'2h'});
+
+            res.status(200).json({ isLogin: true, message: "Login successful",token: token });
         } else {
             res.status(401).json({ isLogin: false, message: "Incorrect password" });
         }
