@@ -9,7 +9,7 @@ const Item = ({item,ondelete}) => {
             <li>{item.value}</li>
             <li>
               <Button 
-               click={() => ondelete(item.item.id)}
+               click={() => ondelete(item.item_id)}
                name={"X"}/> 
             </li>
           </ol>

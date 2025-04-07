@@ -17,6 +17,7 @@ function App() {
   console.log("App component is running");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [items, setItems] = useState([]);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     console.log("Autenticación ha cambiado, estado actual:", isAuthenticated);
@@ -29,7 +30,13 @@ function App() {
   const getItems = async () => {
     try {
       const startTime = Date.now();
-      const result = await fetch("http://localhost:5000/items/", { method: "GET" });
+      const result = await fetch("http://localhost:5000/items/", { 
+          method: "GET",
+          headers: {
+            'Authorization': `Bearer ${token}`
+          } 
+        }
+      );
       const data = await result.json();
       const endTime = Date.now();
       console.log("Tiempo de respuesta del GET:", endTime - startTime, "ms");
@@ -48,7 +55,10 @@ function App() {
   const add = async (item) => {
     const result = await fetch("http://localhost:5000/items/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json" 
+      },
       body: JSON.stringify(item)
     });
     const newItem = await result.json();
@@ -63,8 +73,19 @@ function App() {
   
 
   const del = async (id) => {
+    if (!id) {
+      console.error("ID inválido:", id);
+      return;
+    }
+  
     try {
-      const response = await fetch(`http://localhost:5000/items/${id}`, { method: "DELETE" });
+      const response = await fetch(`http://localhost:5000/items/${id}`, { 
+        method: "DELETE",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+      );
       if (response.ok) {
         setItems(items.filter((item) => item.item_id !== id)); 
       }
@@ -80,8 +101,11 @@ function App() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user)
     });
+
     const data = await result.json();
     console.log(data);
+
+    setToken(data.token);
     setIsAuthenticated(data.isLogin);
     console.log(data.isLogin) 
   };
@@ -94,7 +118,8 @@ function App() {
     const result = await fetch("http://localhost:5000/register/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
+    
     });
     const data = await result.json();
     console.log(data);
