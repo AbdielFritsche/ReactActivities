@@ -1,3 +1,10 @@
 import { Routes } from '@angular/router';
+import { LoginComponent } from './views/login/login.component';
+import { HomeComponent } from './views/home/home.component';
+import { NotFoundComponent } from './views/not-found/not-found.component';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+    {path:"home", component:HomeComponent},
+    {path:"", redirectTo:"login",pathMatch:'full'},
+    {path:"**", component:NotFoundComponent}
+];
