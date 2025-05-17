@@ -29,16 +29,15 @@ function App() {
 
   const getItems = async () => {
     try {
-      const startTime = Date.now();
       const result = await fetch("https://backenddeployreactactivities-production.up.railway.app/items_mongo/", { 
           method: "GET",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           } 
         }
       );
       const data = await result.json();      
-      const endTime = Date.now();
       setItems(data);
     } catch (error) {
       console.error("Error al obtener items:", error);
@@ -52,16 +51,16 @@ function App() {
   const decrement = () => setCount(count - 1);
 
   const add = async (item) => {
+    console.log(token)
     const result = await fetch("https://backenddeployreactactivities-production.up.railway.app/items_mongo/", {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}` 
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(item)
     });
     const newItem = await result.json();
-    console.log(newItem);
     if (result.ok) {
       if (Array.isArray(items)) {
         setItems((prev) => Array.isArray(prev) ? [...prev, newItem] : [newItem]);
