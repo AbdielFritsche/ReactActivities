@@ -33,14 +33,13 @@ function App() {
       const result = await fetch("https://backenddeployreactactivities-production.up.railway.app/items_mongo/", { 
           method: "GET",
           headers: {
-            'Authorization': `Bearer ${token}`
+            "Content-Type": "application/json"
           } 
         }
       );
-      const data = await result.json();
+      const data = await result.json();      
       const endTime = Date.now();
-      console.log("Tiempo de respuesta del GET:", endTime - startTime, "ms");
-      setItems(data.recordset);
+      setItems(data);
     } catch (error) {
       console.error("Error al obtener items:", error);
     }
@@ -56,17 +55,19 @@ function App() {
     const result = await fetch("https://backenddeployreactactivities-production.up.railway.app/items_mongo/", {
       method: "POST",
       headers: { 
-        'Authorization': `Bearer ${token}`,
-        "Content-Type": "application/json" 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` 
       },
       body: JSON.stringify(item)
     });
     const newItem = await result.json();
     console.log(newItem);
     if (result.ok) {
-      setItems([...items, newItem]);
-    } else {
-      console.error('Error adding item:', newItem);
+      if (Array.isArray(items)) {
+        setItems((prev) => Array.isArray(prev) ? [...prev, newItem] : [newItem]);
+      } else {
+        setItems([newItem]); // Reinicia como nuevo array
+      }
     }
   };
   
@@ -74,7 +75,6 @@ function App() {
 
   const del = async (id) => {
     if (!id) {
-      console.error("ID inválido:", id);
       return;
     }
   
@@ -82,12 +82,13 @@ function App() {
       const response = await fetch(`https://backenddeployreactactivities-production.up.railway.app/items_mongo/${id}`, { 
         method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${token}`
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         }
       }
       );
       if (response.ok) {
-        setItems(items.filter((item) => item.item_id !== id)); 
+        setItems(items.filter((item) => item._id !== id)); 
       }
     } catch (error) {
       console.error('Error deleting item:', error);
@@ -103,11 +104,9 @@ function App() {
     });
 
     const data = await result.json();
-    console.log(data);
 
     setToken(data.token);
     setIsAuthenticated(data.isLogin);
-    console.log(data.isLogin) 
   };
 
   const logout = () => {
@@ -122,7 +121,6 @@ function App() {
     
     });
     const data = await result.json();
-    console.log(data);
   
     if (data.success) {
       alert("Registro exitoso, ahora puedes iniciar sesión.");

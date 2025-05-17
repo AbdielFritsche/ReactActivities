@@ -9,7 +9,7 @@ const List = ({ items, ondelete }) => {
   return (
       <>
         {items.map((item) => (
-          <Item key={item.item_id} item={item} 
+          <Item key={item._id} item={item} 
           ondelete={ondelete}
           />
         ))}
