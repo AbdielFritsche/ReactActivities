@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
 const Item = ({item,ondelete}) => {
     return (
@@ -11,6 +12,11 @@ const Item = ({item,ondelete}) => {
               <Button 
                click={() => ondelete(item._id)}
                name={"X"}/> 
+            </li>
+            <li>
+                <Link to={`/items/?id=${item._id}`}>
+                  <Button name="Ver Detalle" />
+                </Link>
             </li>
           </ol>
         </div>

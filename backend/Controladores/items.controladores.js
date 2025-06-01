@@ -23,7 +23,6 @@ export const getItem = async (req, res) => {
             .input("item_id", sql.Int, req.params.item_id)
             .query(" SELECT * FROM Items WHERE item_id = @item_id");
 
-        console.log(data.recordset);
         res.json(data.recordset);
     }
     catch(error)
